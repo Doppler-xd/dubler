@@ -6,8 +6,6 @@ __pycache__/
 .venv/
 venv/
 ENV/
-meme/db.sqlite3
-meme/media/
 .idea/
 .vscode/
 *.swp
