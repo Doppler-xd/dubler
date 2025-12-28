@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-from csp.constants import SELF
+from csp.constants import SELF, NONCE
 # Загружаем переменные окружения
 load_dotenv()
 
@@ -39,16 +39,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": [SELF],
-        "script-src": [SELF],
-        "img-src": [SELF, "data:", "https:"],
+        "script-src": [SELF, "'unsafe-inline'"],  # ← Разрешаем inline-скрипты (часто нужны для Django)
+        "style-src": [SELF, "'unsafe-inline'"],   # ← Разрешаем inline-стили (обязательно для CSS!)
+        "img-src": [SELF, "data:", "https:"],     # ← Разрешаем data: и https:// для изображений
         "object-src": ["'none'"],
         "base-uri": [SELF],
         "frame-ancestors": ["'none'"],
-    }
+        "connect-src": [SELF, "https:"],           # ← Для AJAX-запросов (если есть)
+    },
+    "REPORT_ONLY": False,  # ← Отключаем режим только отчетов
 }
 ROOT_URLCONF = 'meme.urls'
 TEMPLATES = [
