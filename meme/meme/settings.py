@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-
+from csp.constants import SELF
 # Загружаем переменные окружения
 load_dotenv()
 
@@ -40,7 +40,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "default-src": [SELF],
+        "script-src": [SELF],
+        "img-src": [SELF, "data:", "https:"],
+        "object-src": ["'none'"],
+        "base-uri": [SELF],
+        "frame-ancestors": ["'none'"],
+    }
+}
 ROOT_URLCONF = 'meme.urls'
 TEMPLATES = [
     {
